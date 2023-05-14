@@ -1,128 +1,49 @@
 function calculateMinCost() {
-  const ropeLengths = document.getElementById("rope-lengths").value;
-  const lengths = ropeLengths.split(",").map(Number);
+	
+	// const input = document.getElementById("rope-lengths").value;
+	// const ropeLengths = input.split(",").map((length) => parseInt(length));
 
-  const minCost = findMinCost(lengths);
+	// ropeLengths.sort((a, b) => a - b);
 
-  const resultElement = document.getElementById("result");
-  resultElement.innerHTML = `Minimum cost to connect ropes is: ${minCost}`;
-}
+	// let minCost = 0;
+	// let totalCost = 0;
 
-function findMinCost(lengths) {
-  if (lengths.length < 2) {
-    return 0;
-  }
+	// while (ropeLengths.length > 1) {
+	// 	const shortestRope1 = ropeLengths.shift();
+	// 	const shortestRope2 = ropeLengths.shift();
 
-  let totalCost = 0;
+	// 	const cost = shortestRope1 + shortestRope2;
 
-  // Create a min heap of the rope lengths
-  const minHeap = new MinHeap(lengths);
+	// 	minCost += cost;
+	// 	totalCost += cost;
 
-  // Keep joining the two smallest ropes until we have only one rope left in heap
-  while (minHeap.size() > 1) {
-    const smallest = minHeap.extractMin();
-    const secondSmallest = minHeap.extractMin();
+	// 	ropeLengths.push(cost);
 
-    const currentCost = smallest + secondSmallest;
-    totalCost += currentCost;
+	// 	ropeLengths.sort((a, b) => a - b);
+	// }
 
-    minHeap.insert(currentCost);
-  }
+	// const resultDiv = document.getElementById("result");
+	// resultDiv.innerHTML = `The minimum cost of connecting the ropes is ${minCost}.`;
 
-  return totalCost;
-}
+	var inputData = document.querySelector("#rope-lengths").value;
+	var inputArr = inputData.split(",");
 
-class MinHeap {
-  constructor(arr = []) {
-    this.heap = [null];
+	for(var i = 0; i< inputArr.length; i++) {
+		inputArr[i] = Number(inputArr[i]);
+	}
+	var cost = 0;
+	inputArr.sort(function (a,b) { return a-b;});
 
-    // Insert all the elements in heap
-    for (let i = 0; i < arr.length; i++) {
-      this.insert(arr[i]);
-    }
-  }
+	while(inputArr.length > 1) {
+		var newRope = inputArr[0] + inputArr[1];
+		cost += newRope;
 
-  size() {
-    return this.heap.length - 1;
-  }
-
-  // Get parent index of node
-  parent(index) {
-    return Math.floor(index / 2);
-  }
-
-  // Get left child index of node
-  leftChild(index) {
-    return index * 2;
-  }
-
-  // Get right child index of node
-  rightChild(index) {
-    return index * 2 + 1;
-  }
-
-  // Check if node at index i is leaf node
-  isLeaf(index) {
-    return (
-      index > Math.floor(this.size() / 2) && index <= this.size()
-    );
-  }
-
-  // Swap two nodes of heap
-  swap(index1, index2) {
-    [this.heap[index1], this.heap[index2]] = [
-      this.heap[index2],
-      this.heap[index1],
-    ];
-  }
-
-  // Insert a node into heap
-  insert(value) {
-    this.heap.push(value);
-
-    let current = this.size();
-
-    // Keep swapping with parent node if the value is smaller than parent
-    while (
-      current > 1 &&
-      this.heap[current] < this.heap[this.parent(current)]
-    ) {
-      this.swap(current, this.parent(current));
-      current = this.parent(current);
-    }
-  }
-
-  // Extract the minimum element from heap
-  extractMin() {
-    const min = this.heap[1];
-
-    // Move last element to root and remove it
-    this.heap[1] = this.heap.pop();
-
-    // Heapify the root element
-    this.heapify(1);
-
-    return min;
-  }
-
-  // Heapify the element at given index
-  heapify(index) {
-    if (!this.isLeaf(index)) {
-      const leftChildIndex = this.leftChild(index);
-      const rightChildIndex = this.rightChild(index);
-
-      // Find the index of smallest child
-      const smallestChildIndex =
-        this.heap[leftChildIndex] < this.heap[rightChildIndex]
-          ? leftChildIndex
-          : rightChildIndex;
-
-      // Swap with smallest child if parent is greater than smallest child
-      if (this.heap[index] > this.heap[smallestChildIndex]) {
-        this.swap(index, smallestChildIndex);
-        this.heapify(smallestChildIndex);
-      }
-    }
-  }
-}
-
+		// delete first two element
+		inputArr.splice(0,2);
+		inputArr.push(newRope);
+		//alert(newRope);
+		inputArr.sort(function(a,b) { return a-b});
+	}	
+  document.querySelector("#result").textContent = cost;
+	
+}  
